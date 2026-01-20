@@ -30,8 +30,8 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ env.REPO_LC }}:latest
-            ghcr.io/${{ env.REPO_LC }}:${{ github.sha }}
+            ghcr.io/${{ env.REPO_LC }}-backend:latest
+            ghcr.io/${{ env.REPO_LC }}-backend:${{ github.sha }}
 
   deploy:
     needs: build-and-push
