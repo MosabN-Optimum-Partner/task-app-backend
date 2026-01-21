@@ -37,20 +37,19 @@ jobs:
     needs: build-and-push
     runs-on: self-hosted
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set Kubernetes Context
+  
+      - name: Login to GHCR
         run: |
-          kubectl config use-context minikube 
-
-      - name: Deploy Backend ONLY
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+  
+      - name: Deploy using Vault
+        env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+          VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
         run: |
-          helm upgrade --install my-task-app ./task-app \
-            --set dbPassword="${{ secrets.DB_PASSWORD }}" \
-            --set backendImage="ghcr.io/${{ env.REPO_LC }}:${{ github.sha }}" \
-            --wait
-            
-      - name: Verify Backend Rollout
-        run: |
-          kubectl rollout status deployment/backend-task-deployment --timeout=90s
+          cd /home/mosab-nasrallah/Desktop/composer
+          chmod +x generate-env.sh
+          ./generate-env.sh
