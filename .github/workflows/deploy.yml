@@ -51,5 +51,4 @@ jobs:
           VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
         run: |
           cd /home/mosab-nasrallah/Desktop/composer
-          chmod +x deploy-backend.sh
           ./deploy-backend.sh
